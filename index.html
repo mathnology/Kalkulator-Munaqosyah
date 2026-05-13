@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Penilaian Ujian</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        color: #333;
+        background-color: #f4f4f9;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    th {
+        background-color: #e2e8f0;
+        font-weight: bold;
+    }
+    .text-left {
+        text-align: left;
+    }
+    /* Styling khusus untuk input agar menyatu dengan tabel */
+    input[type="number"] {
+        width: 90%;
+        padding: 8px;
+        box-sizing: border-box;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: #fffbdd; /* Warna kuning muda agar terlihat sebagai area input */
+    }
+    input[type="number"]:focus {
+        outline: none;
+        border-color: #4A90E2;
+        background-color: #e6f7ff;
+    }
+    .calculated {
+        background-color: #f9f9f9;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>KALKULATOR PENILAIAN UJIAN</h2>
+
+    <!-- Tabel 1: Penilai -->
+    <table>
+        <tr>
+            <th rowspan="2" style="width: 50px;">NO</th>
+            <th rowspan="2">PENILAI</th>
+            <th colspan="2">NILAI PENGUJI</th>
+            <th rowspan="2" style="width: 120px;">KET.</th>
+        </tr>
+        <tr>
+            <th style="width: 120px;">Angka</th>
+            <th style="width: 80px;">Huruf</th>
+        </tr>
+        <tr>
+            <td>1.</td>
+            <td class="text-left">Ketua Tim</td>
+            <td><input type="number" id="p1" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h1" class="calculated"></td>
+            <td id="k1" class="calculated"></td>
+        </tr>
+        <tr>
+            <td>2.</td>
+            <td class="text-left">Penguji Utama</td>
+            <td><input type="number" id="p2" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h2" class="calculated"></td>
+            <td id="k2" class="calculated"></td>
+        </tr>
+        <tr>
+            <td>3.</td>
+            <td class="text-left">Penguji I</td>
+            <td><input type="number" id="p3" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h3" class="calculated"></td>
+            <td id="k3" class="calculated"></td>
+        </tr>
+        <tr>
+            <td>4.</td>
+            <td class="text-left">Penguji II</td>
+            <td><input type="number" id="p4" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h4" class="calculated"></td>
+            <td id="k4" class="calculated"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="background-color: #e2e8f0;"><strong>Rata - Rata</strong></td>
+            <td id="rataAngka" class="calculated" style="font-size: 18px; color: #d35400;"></td>
+            <td id="rataHuruf" class="calculated"></td>
+            <td id="rataKet" class="calculated"></td>
+        </tr>
+    </table>
+
+    <!-- Tabel 2: Komposisi Nilai -->
+    <table>
+        <tr>
+            <th>KOMPOSISI NILAI</th>
+            <th style="width: 120px;">NILAI</th>
+            <th style="width: 150px;">NILAI X BOBOT</th>
+            <th style="width: 100px;">HURUF</th>
+        </tr>
+        <tr>
+            <td class="text-left">Nilai Tim Penguji (75%)</td>
+            <td id="nilaiTim" class="calculated"></td>
+            <td id="bobotTim" class="calculated"></td>
+            <td rowspan="3" id="hurufAkhir" class="calculated" style="font-size: 24px; color: #27ae60;"></td>
+        </tr>
+        <tr>
+            <td class="text-left">Nilai Ujian Seminar Hasil (25%)</td>
+            <td><input type="number" id="seminar" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="bobotSeminar" class="calculated"></td>
+        </tr>
+        <tr>
+            <td class="text-left" style="background-color: #e2e8f0;"><strong>Nilai Akhir</strong></td>
+            <td style="background-color: #e2e8f0;"></td>
+            <td id="nilaiAkhir" class="calculated" style="font-size: 18px; color: #d35400;"></td>
+        </tr>
+    </table>
+
+    <!-- Tabel 3: Interval dan Kategori Nilai -->
+    <table>
+        <tr>
+            <th rowspan="2">Interval</th>
+            <th colspan="2">NILAI</th>
+            <th rowspan="2">Kategori</th>
+        </tr>
+        <tr>
+            <th style="width: 80px;">Angka</th>
+            <th style="width: 80px;">Huruf</th>
+        </tr>
+        <tr><td>90 &le; A &lt; 100</td><td>4.00</td><td>A</td><td>Lulus</td></tr>
+        <tr><td>86 &le; A- &lt; 90</td><td>3.75</td><td>A-</td><td>Lulus</td></tr>
+        <tr><td>80 &le; B+ &lt; 86</td><td>3.50</td><td>B+</td><td>Lulus</td></tr>
+        <tr><td>76 &le; B &lt; 80</td><td>3.00</td><td>B</td><td>Lulus</td></tr>
+        <tr><td>70 &le; B- &lt; 76</td><td>2.75</td><td>B-</td><td>Lulus</td></tr>
+        <tr><td>66 &le; C+ &lt; 70</td><td>2.50</td><td>C+</td><td>Lulus</td></tr>
+        <tr><td>60 &le; C &lt; 66</td><td>2.00</td><td>C</td><td>Lulus</td></tr>
+        <tr><td>51 &le; D &lt; 60</td><td>1.00</td><td>D</td><td>Tidak Lulus</td></tr>
+        <tr><td>0 &le; E &lt; 50</td><td>0.00</td><td>E</td><td>Tidak Lulus</td></tr>
+    </table>
+</div>
+
+<script>
+    // Fungsi untuk mengonversi angka menjadi huruf dan keterangan
+    function getGradeInfo(score) {
+        if (score === "" || isNaN(score) || score < 0) return { huruf: "", ket: "" };
+        let s = parseFloat(score);
+        if (s >= 90) return { huruf: "A", ket: "Lulus" };
+        if (s >= 86) return { huruf: "A-", ket: "Lulus" };
+        if (s >= 80) return { huruf: "B+", ket: "Lulus" };
+        if (s >= 76) return { huruf: "B", ket: "Lulus" };
+        if (s >= 70) return { huruf: "B-", ket: "Lulus" };
+        if (s >= 66) return { huruf: "C+", ket: "Lulus" };
+        if (s >= 60) return { huruf: "C", ket: "Lulus" };
+        if (s >= 51) return { huruf: "D", ket: "Tidak Lulus" };
+        if (s >= 0)  return { huruf: "E", ket: "Tidak Lulus" };
+        return { huruf: "", ket: "" };
+    }
+
+    // Fungsi utama kalkulator
+    function calculate() {
+        let totalPenguji = 0;
+        let countPenguji = 0;
+
+        // 1. Hitung Nilai Penguji 1 - 4
+        for (let i = 1; i <= 4; i++) {
+            let val = document.getElementById('p' + i).value;
+            let info = getGradeInfo(val);
+            
+            // Update Huruf & Ket per penguji
+            document.getElementById('h' + i).innerText = info.huruf;
+            document.getElementById('k' + i).innerText = info.ket;
+
+            if (val !== "" && !isNaN(val)) {
+                totalPenguji += parseFloat(val);
+                countPenguji++;
+            }
+        }
+
+        // 2. Hitung Rata-Rata
+        let rataRata = 0;
+        if (countPenguji > 0) {
+            rataRata = totalPenguji / countPenguji;
+            document.getElementById('rataAngka').innerText = rataRata.toFixed(2);
+            let rataInfo = getGradeInfo(rataRata);
+            document.getElementById('rataHuruf').innerText = rataInfo.huruf;
+            document.getElementById('rataKet').innerText = rataInfo.ket;
+        } else {
+            document.getElementById('rataAngka').innerText = "";
+            document.getElementById('rataHuruf').innerText = "";
+            document.getElementById('rataKet').innerText = "";
+        }
+
+        // 3. Update Tabel Komposisi Nilai
+        let bobotTim = 0;
+        if (countPenguji > 0) {
+            document.getElementById('nilaiTim').innerText = rataRata.toFixed(2);
+            bobotTim = rataRata * 0.75;
+            document.getElementById('bobotTim').innerText = bobotTim.toFixed(2);
+        } else {
+            document.getElementById('nilaiTim').innerText = "";
+            document.getElementById('bobotTim').innerText = "";
+        }
+
+        // 4. Hitung Seminar Hasil
+        let valSeminar = document.getElementById('seminar').value;
+        let bobotSeminar = 0;
+        if (valSeminar !== "" && !isNaN(valSeminar)) {
+            let numSeminar = parseFloat(valSeminar);
+            bobotSeminar = numSeminar * 0.25;
+            document.getElementById('bobotSeminar').innerText = bobotSeminar.toFixed(2);
+        } else {
+            document.getElementById('bobotSeminar').innerText = "";
+        }
+
+        // 5. Hitung Nilai Akhir & Huruf Akhir
+        if (countPenguji > 0 || (valSeminar !== "" && !isNaN(valSeminar))) {
+            let nilaiAkhir = bobotTim + bobotSeminar;
+            document.getElementById('nilaiAkhir').innerText = nilaiAkhir.toFixed(2);
+            let akhirInfo = getGradeInfo(nilaiAkhir);
+            document.getElementById('hurufAkhir').innerText = akhirInfo.huruf;
+        } else {
+            document.getElementById('nilaiAkhir').innerText = "";
+            document.getElementById('hurufAkhir').innerText = "";
+        }
+    }
+
+    // Pasang Event Listener agar kalkulator berjalan otomatis saat diketik
+    document.querySelectorAll('.input-nilai').forEach(input => {
+        input.addEventListener('input', calculate);
+    });
+</script>
+
+</body>
+</html>
