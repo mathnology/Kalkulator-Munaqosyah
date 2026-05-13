@@ -10,6 +10,7 @@
         padding: 20px;
         color: #333;
         background-color: #f4f4f9;
+        margin: 0;
     }
     .container {
         max-width: 800px;
@@ -22,15 +23,23 @@
     h2 {
         text-align: center;
         margin-bottom: 20px;
+        color: #2c3e50;
+    }
+    /* Pembungkus agar tabel bisa di-scroll horizontal di HP */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-bottom: 30px;
     }
     table {
         width: 100%;
+        min-width: 500px; /* Mencegah tabel terlalu menyempit dan hancur di HP */
         border-collapse: collapse;
-        margin-bottom: 30px;
     }
     th, td {
         border: 1px solid #000;
-        padding: 8px;
+        padding: 10px 8px;
         text-align: center;
         vertical-align: middle;
     }
@@ -41,16 +50,16 @@
     .text-left {
         text-align: left;
     }
-    /* Styling khusus untuk input agar menyatu dengan tabel */
     input[type="number"] {
-        width: 90%;
-        padding: 8px;
+        width: 100%;
+        min-width: 60px;
+        padding: 10px 5px;
         box-sizing: border-box;
         text-align: center;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 16px;
-        background-color: #fffbdd; /* Warna kuning muda agar terlihat sebagai area input */
+        background-color: #fffbdd;
     }
     input[type="number"]:focus {
         outline: none;
@@ -62,6 +71,27 @@
         font-weight: bold;
         color: #2c3e50;
     }
+
+    /* Penyesuaian khusus untuk layar HP (Mobile Responsiveness) */
+    @media screen and (max-width: 600px) {
+        body {
+            padding: 10px;
+        }
+        .container {
+            padding: 15px;
+        }
+        h2 {
+            font-size: 1.2rem;
+        }
+        th, td {
+            font-size: 14px;
+            padding: 8px 4px;
+        }
+        input[type="number"] {
+            font-size: 14px;
+            padding: 8px 2px;
+        }
+    }
 </style>
 </head>
 <body>
@@ -70,104 +100,109 @@
     <h2>KALKULATOR PENILAIAN UJIAN</h2>
 
     <!-- Tabel 1: Penilai -->
-    <table>
-        <tr>
-            <th rowspan="2" style="width: 50px;">NO</th>
-            <th rowspan="2">PENILAI</th>
-            <th colspan="2">NILAI PENGUJI</th>
-            <th rowspan="2" style="width: 120px;">KET.</th>
-        </tr>
-        <tr>
-            <th style="width: 120px;">Angka</th>
-            <th style="width: 80px;">Huruf</th>
-        </tr>
-        <tr>
-            <td>1.</td>
-            <td class="text-left">Ketua Tim</td>
-            <td><input type="number" id="p1" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
-            <td id="h1" class="calculated"></td>
-            <td id="k1" class="calculated"></td>
-        </tr>
-        <tr>
-            <td>2.</td>
-            <td class="text-left">Penguji Utama</td>
-            <td><input type="number" id="p2" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
-            <td id="h2" class="calculated"></td>
-            <td id="k2" class="calculated"></td>
-        </tr>
-        <tr>
-            <td>3.</td>
-            <td class="text-left">Penguji I</td>
-            <td><input type="number" id="p3" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
-            <td id="h3" class="calculated"></td>
-            <td id="k3" class="calculated"></td>
-        </tr>
-        <tr>
-            <td>4.</td>
-            <td class="text-left">Penguji II</td>
-            <td><input type="number" id="p4" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
-            <td id="h4" class="calculated"></td>
-            <td id="k4" class="calculated"></td>
-        </tr>
-        <tr>
-            <td colspan="2" style="background-color: #e2e8f0;"><strong>Rata - Rata</strong></td>
-            <td id="rataAngka" class="calculated" style="font-size: 18px; color: #d35400;"></td>
-            <td id="rataHuruf" class="calculated"></td>
-            <td id="rataKet" class="calculated"></td>
-        </tr>
-    </table>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th rowspan="2" style="width: 10%;">NO</th>
+                <th rowspan="2" style="width: 35%;">PENILAI</th>
+                <th colspan="2">NILAI PENGUJI</th>
+                <th rowspan="2" style="width: 15%;">KET.</th>
+            </tr>
+            <tr>
+                <th style="width: 25%;">Angka</th>
+                <th style="width: 15%;">Huruf</th>
+            </tr>
+            <tr>
+                <td>1.</td>
+                <td class="text-left">Ketua Tim</td>
+                <td><input type="number" id="p1" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+                <td id="h1" class="calculated"></td>
+                <td id="k1" class="calculated"></td>
+            </tr>
+            <tr>
+                <td>2.</td>
+                <td class="text-left">Penguji Utama</td>
+                <td><input type="number" id="p2" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+                <td id="h2" class="calculated"></td>
+                <td id="k2" class="calculated"></td>
+            </tr>
+            <tr>
+                <td>3.</td>
+                <td class="text-left">Penguji I</td>
+                <td><input type="number" id="p3" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+                <td id="h3" class="calculated"></td>
+                <td id="k3" class="calculated"></td>
+            </tr>
+            <tr>
+                <td>4.</td>
+                <td class="text-left">Penguji II</td>
+                <td><input type="number" id="p4" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+                <td id="h4" class="calculated"></td>
+                <td id="k4" class="calculated"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="background-color: #e2e8f0;"><strong>Rata - Rata</strong></td>
+                <td id="rataAngka" class="calculated" style="font-size: 16px; color: #d35400;"></td>
+                <td id="rataHuruf" class="calculated"></td>
+                <td id="rataKet" class="calculated"></td>
+            </tr>
+        </table>
+    </div>
 
     <!-- Tabel 2: Komposisi Nilai -->
-    <table>
-        <tr>
-            <th>KOMPOSISI NILAI</th>
-            <th style="width: 120px;">NILAI</th>
-            <th style="width: 150px;">NILAI X BOBOT</th>
-            <th style="width: 100px;">HURUF</th>
-        </tr>
-        <tr>
-            <td class="text-left">Nilai Tim Penguji (75%)</td>
-            <td id="nilaiTim" class="calculated"></td>
-            <td id="bobotTim" class="calculated"></td>
-            <td rowspan="3" id="hurufAkhir" class="calculated" style="font-size: 24px; color: #27ae60;"></td>
-        </tr>
-        <tr>
-            <td class="text-left">Nilai Ujian Seminar Hasil (25%)</td>
-            <td><input type="number" id="seminar" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
-            <td id="bobotSeminar" class="calculated"></td>
-        </tr>
-        <tr>
-            <td class="text-left" style="background-color: #e2e8f0;"><strong>Nilai Akhir</strong></td>
-            <td style="background-color: #e2e8f0;"></td>
-            <td id="nilaiAkhir" class="calculated" style="font-size: 18px; color: #d35400;"></td>
-        </tr>
-    </table>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th style="width: 45%;">KOMPOSISI NILAI</th>
+                <th style="width: 20%;">NILAI</th>
+                <th style="width: 20%;">NILAI X BOBOT</th>
+                <th style="width: 15%;">HURUF</th>
+            </tr>
+            <tr>
+                <td class="text-left">Nilai Tim Penguji (75%)</td>
+                <td id="nilaiTim" class="calculated"></td>
+                <td id="bobotTim" class="calculated"></td>
+                <td rowspan="3" id="hurufAkhir" class="calculated" style="font-size: 22px; color: #27ae60;"></td>
+            </tr>
+            <tr>
+                <td class="text-left">Nilai Ujian Seminar Hasil (25%)</td>
+                <td><input type="number" id="seminar" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+                <td id="bobotSeminar" class="calculated"></td>
+            </tr>
+            <tr>
+                <td class="text-left" style="background-color: #e2e8f0;"><strong>Nilai Akhir</strong></td>
+                <td style="background-color: #e2e8f0;"></td>
+                <td id="nilaiAkhir" class="calculated" style="font-size: 16px; color: #d35400;"></td>
+            </tr>
+        </table>
+    </div>
 
     <!-- Tabel 3: Interval dan Kategori Nilai -->
-    <table>
-        <tr>
-            <th rowspan="2">Interval</th>
-            <th colspan="2">NILAI</th>
-            <th rowspan="2">Kategori</th>
-        </tr>
-        <tr>
-            <th style="width: 80px;">Angka</th>
-            <th style="width: 80px;">Huruf</th>
-        </tr>
-        <tr><td>90 &le; A &lt; 100</td><td>4.00</td><td>A</td><td>Lulus</td></tr>
-        <tr><td>86 &le; A- &lt; 90</td><td>3.75</td><td>A-</td><td>Lulus</td></tr>
-        <tr><td>80 &le; B+ &lt; 86</td><td>3.50</td><td>B+</td><td>Lulus</td></tr>
-        <tr><td>76 &le; B &lt; 80</td><td>3.00</td><td>B</td><td>Lulus</td></tr>
-        <tr><td>70 &le; B- &lt; 76</td><td>2.75</td><td>B-</td><td>Lulus</td></tr>
-        <tr><td>66 &le; C+ &lt; 70</td><td>2.50</td><td>C+</td><td>Lulus</td></tr>
-        <tr><td>60 &le; C &lt; 66</td><td>2.00</td><td>C</td><td>Lulus</td></tr>
-        <tr><td>51 &le; D &lt; 60</td><td>1.00</td><td>D</td><td>Tidak Lulus</td></tr>
-        <tr><td>0 &le; E &lt; 50</td><td>0.00</td><td>E</td><td>Tidak Lulus</td></tr>
-    </table>
+    <div class="table-responsive">
+        <table>
+            <tr>
+                <th rowspan="2" style="width: 40%;">Interval</th>
+                <th colspan="2">NILAI</th>
+                <th rowspan="2" style="width: 30%;">Kategori</th>
+            </tr>
+            <tr>
+                <th style="width: 15%;">Angka</th>
+                <th style="width: 15%;">Huruf</th>
+            </tr>
+            <tr><td>90 &le; A &lt; 100</td><td>4.00</td><td>A</td><td>Lulus</td></tr>
+            <tr><td>86 &le; A- &lt; 90</td><td>3.75</td><td>A-</td><td>Lulus</td></tr>
+            <tr><td>80 &le; B+ &lt; 86</td><td>3.50</td><td>B+</td><td>Lulus</td></tr>
+            <tr><td>76 &le; B &lt; 80</td><td>3.00</td><td>B</td><td>Lulus</td></tr>
+            <tr><td>70 &le; B- &lt; 76</td><td>2.75</td><td>B-</td><td>Lulus</td></tr>
+            <tr><td>66 &le; C+ &lt; 70</td><td>2.50</td><td>C+</td><td>Lulus</td></tr>
+            <tr><td>60 &le; C &lt; 66</td><td>2.00</td><td>C</td><td>Lulus</td></tr>
+            <tr><td>51 &le; D &lt; 60</td><td>1.00</td><td>D</td><td>Tidak Lulus</td></tr>
+            <tr><td>0 &le; E &lt; 50</td><td>0.00</td><td>E</td><td>Tidak Lulus</td></tr>
+        </table>
+    </div>
 </div>
 
 <script>
-    // Fungsi untuk mengonversi angka menjadi huruf dan keterangan
     function getGradeInfo(score) {
         if (score === "" || isNaN(score) || score < 0) return { huruf: "", ket: "" };
         let s = parseFloat(score);
@@ -183,17 +218,14 @@
         return { huruf: "", ket: "" };
     }
 
-    // Fungsi utama kalkulator
     function calculate() {
         let totalPenguji = 0;
         let countPenguji = 0;
 
-        // 1. Hitung Nilai Penguji 1 - 4
         for (let i = 1; i <= 4; i++) {
             let val = document.getElementById('p' + i).value;
             let info = getGradeInfo(val);
             
-            // Update Huruf & Ket per penguji
             document.getElementById('h' + i).innerText = info.huruf;
             document.getElementById('k' + i).innerText = info.ket;
 
@@ -203,7 +235,6 @@
             }
         }
 
-        // 2. Hitung Rata-Rata
         let rataRata = 0;
         if (countPenguji > 0) {
             rataRata = totalPenguji / countPenguji;
@@ -217,7 +248,6 @@
             document.getElementById('rataKet').innerText = "";
         }
 
-        // 3. Update Tabel Komposisi Nilai
         let bobotTim = 0;
         if (countPenguji > 0) {
             document.getElementById('nilaiTim').innerText = rataRata.toFixed(2);
@@ -228,7 +258,6 @@
             document.getElementById('bobotTim').innerText = "";
         }
 
-        // 4. Hitung Seminar Hasil
         let valSeminar = document.getElementById('seminar').value;
         let bobotSeminar = 0;
         if (valSeminar !== "" && !isNaN(valSeminar)) {
@@ -239,7 +268,6 @@
             document.getElementById('bobotSeminar').innerText = "";
         }
 
-        // 5. Hitung Nilai Akhir & Huruf Akhir
         if (countPenguji > 0 || (valSeminar !== "" && !isNaN(valSeminar))) {
             let nilaiAkhir = bobotTim + bobotSeminar;
             document.getElementById('nilaiAkhir').innerText = nilaiAkhir.toFixed(2);
@@ -251,7 +279,6 @@
         }
     }
 
-    // Pasang Event Listener agar kalkulator berjalan otomatis saat diketik
     document.querySelectorAll('.input-nilai').forEach(input => {
         input.addEventListener('input', calculate);
     });
