@@ -1,391 +1,255 @@
-<!doctype html>
-<html lang="id" class="h-full">
+<!DOCTYPE html>
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scopus Introduction Guide - Pro</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    html, body { height: 100%; margin: 0; box-sizing: border-box; }
-    * { box-sizing: border-box; }
-    
-    /* Animations & Transitions */
-    .card-hover { transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
-    .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(10px); } }
-    
-    .progress-ring { transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-    .check-item { transition: background-color 0.3s ease; }
-    .check-item:hover { background: rgba(255,255,255,0.04); }
-    .glow { box-shadow: 0 0 40px rgba(234, 179, 8, 0.04); }
-    
-    /* Checkbox animations */
-    .check-box { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .check-icon { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(0); opacity: 0; }
-    .is-checked .check-icon { transform: scale(1); opacity: 1; }
-    .is-checked .check-text { color: #8a8882 !important; text-decoration: line-through; }
-
-    /* Info Panel Transitions */
-    .info-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease-out; }
-    .info-panel.open { grid-template-rows: 1fr; }
-    .info-panel-inner { overflow: hidden; }
-    .info-btn { transition: all 0.2s; }
-    .info-btn:hover { transform: scale(1.1); filter: brightness(1.2); }
-    .info-btn.active { transform: rotate(180deg); }
-  </style>
+<meta charset="UTF-8">
+<!-- Mengatur viewport ke lebar tetap (850px) agar tampil seperti laptop di HP dan bisa di-zoom -->
+<meta name="viewport" content="width=850, user-scalable=yes">
+<title>Kalkulator Penilaian Ujian</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        color: #333;
+        background-color: #f4f4f9;
+        margin: 0;
+    }
+    .container {
+        width: 800px; /* Diubah dari max-width menjadi width tetap */
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    th, td {
+        border: 1px solid #000;
+        padding: 10px 8px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    th {
+        background-color: #e2e8f0;
+        font-weight: bold;
+    }
+    .text-left {
+        text-align: left;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 10px 5px;
+        box-sizing: border-box;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: #fffbdd;
+    }
+    input[type="number"]:focus {
+        outline: none;
+        border-color: #4A90E2;
+        background-color: #e6f7ff;
+    }
+    .calculated {
+        background-color: #f9f9f9;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+</style>
 </head>
-<body class="h-full overflow-auto" style="background-color: #0f1117; color: #e8e6e1; font-family: 'Source Sans 3', sans-serif;">
-  <div id="app" class="w-full min-h-full pb-10" style="background: linear-gradient(165deg, #0f1117 0%, #161821 40%, #1a1520 100%);">
-    <!-- Decorative top bar -->
-    <div class="w-full h-1.5" style="background: linear-gradient(90deg, #d4a843, #fcd34d, #d4a843); background-size: 200% auto;"></div>
-    
-    <!-- Hero -->
-    <header class="w-full px-6 pt-16 pb-10 text-center relative overflow-hidden">
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full opacity-5 pointer-events-none" style="background: radial-gradient(circle, #d4a843, transparent 70%);"></div>
-      <div class="fade-in relative z-10" style="animation-delay: 0.1s;">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase mb-6 shadow-lg" style="background: rgba(212,168,67,0.15); color: #e8c96a; border: 1px solid rgba(212,168,67,0.3);">
-          <i data-lucide="graduation-cap" class="w-4 h-4"></i> Interactive Learning Tool
-        </div>
-      </div>
-      <h1 id="mainTitle" class="fade-in relative z-10 text-4xl md:text-5xl font-bold leading-tight mb-4" style="font-family: 'Playfair Display', serif; color: #e8e6e1; animation-delay: 0.2s;">
-        Mastering Scopus<br>Introductions
-      </h1>
-      <p id="subtitle" class="fade-in relative z-10 text-lg max-w-xl mx-auto" style="color: #9a978f; animation-delay: 0.3s;">
-        Klik teks untuk mencentang progres, dan klik ikon <strong>(?)</strong> untuk melihat contoh kalimat & penjelasan.
-      </p>
-    </header>
+<body>
 
-    <!-- Progress Section -->
-    <div class="max-w-5xl mx-auto px-6 mb-10 fade-in" style="animation-delay: 0.35s;">
-      <div class="flex items-center justify-between p-5 rounded-2xl shadow-lg backdrop-blur-sm" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
-        <div class="flex-1">
-          <div class="flex items-center gap-3">
-            <p class="text-sm font-bold tracking-wide" style="color: #e8c96a;">PROGRESS PENULISAN</p>
-            <button id="resetBtn" class="text-xs px-2 py-1 rounded opacity-60 hover:opacity-100 transition-opacity bg-red-500/10 text-red-400 border border-red-500/20 hidden">Reset</button>
-          </div>
-          <p id="progressText" class="text-sm mt-1" style="color: #9a978f;">Memuat progres...</p>
-        </div>
-        <div class="relative w-16 h-16 flex-shrink-0">
-          <svg class="w-16 h-16 -rotate-90" viewBox="0 0 56 56">
-            <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4" /> 
-            <circle id="progressCircle" class="progress-ring" cx="28" cy="28" r="24" fill="none" stroke="#d4a843" stroke-width="4" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" />
-          </svg>
-          <span id="progressPercent" class="absolute inset-0 flex items-center justify-center text-sm font-bold" style="color: #e8c96a;">0%</span>
-        </div>
-      </div>
-    </div>
+<div class="container">
+    <h2>KALKULATOR PENILAIAN UJIAN</h2>
 
-    <!-- Cards Grid -->
-    <main class="max-w-5xl mx-auto px-6 mb-12">
-      <div id="cardGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-    </main>
+    <!-- Tabel 1: Penilai -->
+    <table>
+        <tr>
+            <th rowspan="2" style="width: 50px;">NO</th>
+            <th rowspan="2" style="width: 250px;">PENILAI</th>
+            <th colspan="2">NILAI PENGUJI</th>
+            <th rowspan="2" style="width: 120px;">KET.</th>
+        </tr>
+        <tr>
+            <th style="width: 120px;">Angka</th>
+            <th style="width: 80px;">Huruf</th>
+        </tr>
+        <tr>
+            <td>1.</td>
+            <td class="text-left">Ketua Tim</td>
+            <td><input type="number" id="p1" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h1" class="calculated"></td>
+            <td id="k1" class="calculated"></td>
+        </tr>
+        <tr>
+            <td>2.</td>
+            <td class="text-left">Penguji Utama</td>
+            <td><input type="number" id="p2" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h2" class="calculated"></td>
+            <td id="k2" class="calculated"></td>
+        </tr>
+        <tr>
+            <td>3.</td>
+            <td class="text-left">Penguji I</td>
+            <td><input type="number" id="p3" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h3" class="calculated"></td>
+            <td id="k3" class="calculated"></td>
+        </tr>
+        <tr>
+            <td>4.</td>
+            <td class="text-left">Penguji II</td>
+            <td><input type="number" id="p4" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="h4" class="calculated"></td>
+            <td id="k4" class="calculated"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="background-color: #e2e8f0;"><strong>Rata - Rata</strong></td>
+            <td id="rataAngka" class="calculated" style="font-size: 16px; color: #d35400;"></td>
+            <td id="rataHuruf" class="calculated"></td>
+            <td id="rataKet" class="calculated"></td>
+        </tr>
+    </table>
 
-    <!-- Academic Phrase Bank Section -->
-    <section class="max-w-5xl mx-auto px-6 pb-16 fade-in" style="animation-delay: 0.8s;">
-      <div class="rounded-2xl p-8" style="background: linear-gradient(to right, rgba(212,168,67,0.05), rgba(212,168,67,0.02)); border: 1px solid rgba(212,168,67,0.2);">
-        <div class="flex items-center gap-3 mb-6">
-          <i data-lucide="book-marked" style="color:#e8c96a; width: 28px; height: 28px;"></i>
-          <h2 class="text-2xl font-bold" style="font-family:'Playfair Display', serif;">Academic Phrase Bank (Cheat Sheet)</h2>
-        </div>
-        <p class="text-sm mb-6" style="color: #9a978f;">Gunakan frasa standar ini untuk meningkatkan kesan akademis pada artikel Anda.</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Col 1 -->
-          <div class="p-4 rounded-xl" style="background: rgba(0,0,0,0.2);">
-            <h4 class="text-sm font-bold text-blue-300 mb-3 border-b border-blue-900/50 pb-2">1. Mengkritik / Menunjukkan Gap</h4>
-            <ul class="text-sm space-y-2 text-gray-300 list-disc pl-4">
-              <li>However, little attention has been paid to...</li>
-              <li>Previous studies have failed to consider...</li>
-              <li>There is a lack of empirical research regarding...</li>
-            </ul>
-          </div>
-          <!-- Col 2 -->
-          <div class="p-4 rounded-xl" style="background: rgba(0,0,0,0.2);">
-            <h4 class="text-sm font-bold text-green-300 mb-3 border-b border-green-900/50 pb-2">2. Menyatakan Tujuan</h4>
-            <ul class="text-sm space-y-2 text-gray-300 list-disc pl-4">
-              <li>This study seeks to address this gap by...</li>
-              <li>The primary objective of this paper is to...</li>
-              <li>This research extends current knowledge by...</li>
-            </ul>
-          </div>
-          <!-- Col 3 -->
-          <div class="p-4 rounded-xl" style="background: rgba(0,0,0,0.2);">
-            <h4 class="text-sm font-bold text-purple-300 mb-3 border-b border-purple-900/50 pb-2">3. Merujuk Literatur</h4>
-            <ul class="text-sm space-y-2 text-gray-300 list-disc pl-4">
-              <li>Recent evidence suggests that... (Smith, 2023).</li>
-              <li>A considerable amount of literature has been published on...</li>
-              <li>As noted by Johnson (2024), ...</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+    <!-- Tabel 2: Komposisi Nilai -->
+    <table>
+        <tr>
+            <th style="width: 350px;">KOMPOSISI NILAI</th>
+            <th style="width: 120px;">NILAI</th>
+            <th style="width: 150px;">NILAI X BOBOT</th>
+            <th style="width: 100px;">HURUF</th>
+        </tr>
+        <tr>
+            <td class="text-left">Nilai Tim Penguji (75%)</td>
+            <td id="nilaiTim" class="calculated"></td>
+            <td id="bobotTim" class="calculated"></td>
+            <td rowspan="3" id="hurufAkhir" class="calculated" style="font-size: 22px; color: #27ae60;"></td>
+        </tr>
+        <tr>
+            <td class="text-left">Nilai Ujian Seminar Hasil (25%)</td>
+            <td><input type="number" id="seminar" class="input-nilai" min="0" max="100" placeholder="0-100"></td>
+            <td id="bobotSeminar" class="calculated"></td>
+        </tr>
+        <tr>
+            <td class="text-left" style="background-color: #e2e8f0;"><strong>Nilai Akhir</strong></td>
+            <td style="background-color: #e2e8f0;"></td>
+            <td id="nilaiAkhir" class="calculated" style="font-size: 16px; color: #d35400;"></td>
+        </tr>
+    </table>
 
-  <script>
-    const DATA = [
-      { icon: "telescope", title: "Konteks & Latar Belakang", color: "#e8c96a",
-        points: [
-          { text: "Gunakan 'Funnel Approach' (Umum ke Spesifik)", 
-            why: "Membantu pembaca non-ahli memahami konteks sebelum masuk ke masalah teknis riset Anda.", 
-            example: "Paragraf 1: Isu perubahan iklim global. Paragraf 2: Dampaknya pada pertanian padi. Paragraf 3: Masalah spesifik hama wereng akibat suhu." },
-          { text: "Jelaskan urgensi penelitian", 
-            why: "Reviewer ingin tahu 'Kenapa riset ini penting dilakukan SEKARANG?'.", 
-            example: "Contoh: 'Dengan meningkatnya serangan hama x dalam 5 tahun terakhir, menemukan solusi ramah lingkungan menjadi sangat mendesak.'" },
-          { text: "Gunakan data/fakta terkini", 
-            why: "Klaim tanpa data dianggap sebagai opini subjektif.", 
-            example: "'Menurut WHO (2023), sebanyak 40% populasi...'" }
-        ]},
-      { icon: "book-open", title: "Kajian Literatur", color: "#7ec8e3",
-        points: [
-          { text: "Sitasi minimal 15–20 referensi 5 tahun terakhir", 
-            why: "Menunjukkan bahwa riset Anda mengikuti perkembangan ilmu pengetahuan terkini (state-of-the-art).", 
-            example: "Usahakan >80% daftar pustaka berasal dari jurnal yang terbit setelah tahun 2019." },
-          { text: "Identifikasi konsensus penelitian sebelumnya", 
-            why: "Mencegah Anda meneliti ulang sesuatu yang sudah disepakati oleh ilmuwan lain.", 
-            example: "Contoh: 'Sebagian besar studi sepakat bahwa metode A efektif (Smith, 2021; Doe, 2022), namun...'" }
-        ]},
-      { icon: "search", title: "Research Gap (Krusial!)", color: "#f0a07a",
-        points: [
-          { text: "Tunjukkan celah literatur secara eksplisit", 
-            why: "Tanpa Research Gap, artikel Anda akan ditolak karena dianggap tidak membawa hal baru.", 
-            example: "Gunakan kata kunci: However, Nevertheless, Yet, Limited studies, To date, No previous research..." },
-          { text: "Hubungkan Gap dengan Tujuan", 
-            why: "Agar logika alur terbaca jelas oleh reviewer.", 
-            example: "Contoh: '...Namun, riset terkait variabel Y masih sangat terbatas. Oleh karena itu, studi ini bertujuan untuk...'" }
-        ]},
-      { icon: "target", title: "Tujuan Penelitian", color: "#a8d5a2",
-        points: [
-          { text: "Nyatakan tujuan secara jelas dan spesifik", 
-            why: "Pembaca tidak boleh menebak-nebak apa yang sebenarnya Anda cari.", 
-            example: "Gunakan kalimat lugas: 'This study aims to investigate the effect of X on Y within the context of Z.'" }
-        ]},
-      { icon: "trophy", title: "Novelty & Kontribusi", color: "#f7d76e",
-        points: [
-          { text: "Jelaskan kebaruan (Novelty) riset", 
-            why: "Ini adalah 'nilai jual' utama artikel Anda di jurnal bereputasi tinggi.", 
-            example: "Contoh: 'Berbeda dengan studi sebelumnya, riset ini mengusulkan algoritma baru yang lebih ringan...'" },
-          { text: "Uraikan kontribusi praktis/teoretis", 
-            why: "Menjawab pertanyaan reviewer: 'Lalu kenapa kalau riset ini berhasil? Apa gunanya?'", 
-            example: "Contoh: 'Hasil riset ini diharapkan dapat menjadi panduan bagi pembuat kebijakan dalam...'" }
-        ]},
-      { icon: "pen-tool", title: "Gaya Bahasa", color: "#e88a9a",
-        points: [
-          { text: "Penggunaan Tense yang tepat", 
-            why: "Grammar yang salah menurunkan kredibilitas saintifik.", 
-            example: "Gunakan Present Tense untuk fakta umum ('Earth is round'). Gunakan Past Tense untuk merujuk hasil studi spesifik di masa lalu ('Smith found that...')." },
-          { text: "Hindari kalimat terlalu panjang (>25 kata)", 
-            why: "Kalimat panjang (run-on sentences) membuat pembaca bingung.", 
-            example: "Pecah kalimat yang memuat terlalu banyak kata hubung 'dan', 'yang mana', 'sehingga'." }
-        ]}
-    ];
+    <!-- Tabel 3: Interval dan Kategori Nilai -->
+    <table>
+        <tr>
+            <th rowspan="2" style="width: 250px;">Interval</th>
+            <th colspan="2">NILAI</th>
+            <th rowspan="2" style="width: 150px;">Kategori</th>
+        </tr>
+        <tr>
+            <th style="width: 100px;">Angka</th>
+            <th style="width: 100px;">Huruf</th>
+        </tr>
+        <tr><td>90 &le; A &lt; 100</td><td>4.00</td><td>A</td><td>Lulus</td></tr>
+        <tr><td>86 &le; A- &lt; 90</td><td>3.75</td><td>A-</td><td>Lulus</td></tr>
+        <tr><td>80 &le; B+ &lt; 86</td><td>3.50</td><td>B+</td><td>Lulus</td></tr>
+        <tr><td>76 &le; B &lt; 80</td><td>3.00</td><td>B</td><td>Lulus</td></tr>
+        <tr><td>70 &le; B- &lt; 76</td><td>2.75</td><td>B-</td><td>Lulus</td></tr>
+        <tr><td>66 &le; C+ &lt; 70</td><td>2.50</td><td>C+</td><td>Lulus</td></tr>
+        <tr><td>60 &le; C &lt; 66</td><td>2.00</td><td>C</td><td>Lulus</td></tr>
+        <tr><td>51 &le; D &lt; 60</td><td>1.00</td><td>D</td><td>Tidak Lulus</td></tr>
+        <tr><td>0 &le; E &lt; 50</td><td>0.00</td><td>E</td><td>Tidak Lulus</td></tr>
+    </table>
 
-    let checked = new Set();
-    const totalPoints = DATA.reduce((s, d) => s + d.points.length, 0);
+</div>
 
-    function initCards() {
-      const grid = document.getElementById('cardGrid');
-      grid.innerHTML = '';
-      
-      DATA.forEach((item, categoryIndex) => {
-        const card = document.createElement('div');
-        card.className = 'card-hover rounded-2xl p-6 fade-in glow flex flex-col relative overflow-hidden';
-        card.style.cssText = `background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); animation-delay: ${0.4 + categoryIndex*0.08}s;`;
-        
-        // Dekorasi background card
-        const deco = document.createElement('div');
-        deco.className = 'absolute -top-10 -right-10 w-32 h-32 rounded-full opacity-5 pointer-events-none';
-        deco.style.background = `radial-gradient(circle, ${item.color}, transparent 70%)`;
-        card.appendChild(deco);
+<script>
+    function getGradeInfo(score) {
+        if (score === "" || isNaN(score) || score < 0) return { huruf: "", ket: "" };
+        let s = parseFloat(score);
+        if (s >= 90) return { huruf: "A", ket: "Lulus" };
+        if (s >= 86) return { huruf: "A-", ket: "Lulus" };
+        if (s >= 80) return { huruf: "B+", ket: "Lulus" };
+        if (s >= 76) return { huruf: "B", ket: "Lulus" };
+        if (s >= 70) return { huruf: "B-", ket: "Lulus" };
+        if (s >= 66) return { huruf: "C+", ket: "Lulus" };
+        if (s >= 60) return { huruf: "C", ket: "Lulus" };
+        if (s >= 51) return { huruf: "D", ket: "Tidak Lulus" };
+        if (s >= 0)  return { huruf: "E", ket: "Tidak Lulus" };
+        return { huruf: "", ket: "" };
+    }
 
-        const headerHTML = `
-          <div class="flex items-center gap-4 mb-5 pb-4 border-b border-white/5 relative z-10">
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: ${item.color}15; border: 1px solid ${item.color}30;">
-              <i data-lucide="${item.icon}" style="width:24px;height:24px;color:${item.color};"></i>
-            </div>
-            <div>
-              <h3 class="text-lg font-bold leading-tight" style="font-family:'Playfair Display',serif; color:#e8e6e1;">${item.title}</h3>
-            </div>
-          </div>
-        `;
-        card.innerHTML += headerHTML;
-        
-        const pointsDiv = document.createElement('div');
-        pointsDiv.className = 'space-y-1.5 flex-1 relative z-10';
-        
-        item.points.forEach((p, pointIndex) => {
-          const key = `${categoryIndex}-${pointIndex}`;
-          const isDone = checked.has(key);
-          
-          const wrapper = document.createElement('div');
-          wrapper.className = 'rounded-xl overflow-hidden check-item';
+    function calculate() {
+        let totalPenguji = 0;
+        let countPenguji = 0;
 
-          // Baris utama (Checklist + Tombol Info)
-          const mainRow = document.createElement('div');
-          mainRow.className = `flex items-start gap-3 p-3 group ${isDone ? 'is-checked' : ''}`;
-          
-          // Area Centang & Teks (Bisa diklik)
-          const clickArea = document.createElement('div');
-          clickArea.className = 'flex flex-1 items-start gap-3 cursor-pointer select-none';
-          
-          const checkbox = document.createElement('div');
-          checkbox.className = 'check-box mt-0.5 w-5 h-5 rounded flex-shrink-0 flex items-center justify-center border-2';
-          checkbox.style.borderColor = isDone ? item.color : 'rgba(255,255,255,0.2)';
-          checkbox.style.backgroundColor = isDone ? `${item.color}20` : 'transparent';
-          
-          const checkIcon = document.createElement('i');
-          checkIcon.setAttribute('data-lucide', 'check');
-          checkIcon.className = 'check-icon';
-          checkIcon.style.cssText = `width:14px;height:14px;color:${item.color}; stroke-width: 3;`;
-          checkbox.appendChild(checkIcon);
-          
-          const text = document.createElement('span');
-          text.className = 'check-text text-sm leading-relaxed transition-colors duration-300 font-medium';
-          text.style.color = '#d1cece';
-          text.textContent = p.text;
-          
-          clickArea.appendChild(checkbox);
-          clickArea.appendChild(text);
-
-          // Event click untuk checklist
-          clickArea.addEventListener('click', () => toggleCheck(key, mainRow, checkbox, item.color));
-
-          // Tombol Info (Terpisah click-nya)
-          const infoBtn = document.createElement('button');
-          infoBtn.className = 'info-btn w-6 h-6 flex-shrink-0 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-gray-400 mt-0.5';
-          infoBtn.innerHTML = `<i data-lucide="help-circle" style="width:14px;height:14px;"></i>`;
-          
-          mainRow.appendChild(clickArea);
-          mainRow.appendChild(infoBtn);
-          wrapper.appendChild(mainRow);
-
-          // Panel Penjelasan (Accordion)
-          const infoPanel = document.createElement('div');
-          infoPanel.className = 'info-panel text-sm bg-black/20';
-          
-          const infoInner = document.createElement('div');
-          infoInner.className = 'info-panel-inner px-4 pb-4 pt-1 ml-9'; // indentasi menyesuaikan kotak centang
-          
-          infoInner.innerHTML = `
-            <div class="mb-2">
-              <span class="text-xs font-bold uppercase tracking-wider mb-1 block" style="color: ${item.color};">MENGAPA PENTING?</span>
-              <p class="text-gray-300 leading-relaxed">${p.why}</p>
-            </div>
-            <div class="p-3 mt-3 rounded-lg border border-white/5" style="background: rgba(255,255,255,0.03);">
-              <span class="text-xs font-bold uppercase tracking-wider mb-1 block text-gray-400"><i data-lucide="quote" class="inline w-3 h-3 mr-1"></i>CONTOH</span>
-              <p class="text-gray-300 italic">"${p.example}"</p>
-            </div>
-          `;
-          infoPanel.appendChild(infoInner);
-          wrapper.appendChild(infoPanel);
-
-          // Event click untuk tombol info
-          infoBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const isOpen = infoPanel.classList.contains('open');
-            // Tutup semua panel lain dalam card yang sama agar rapi (opsional)
-            wrapper.parentElement.querySelectorAll('.info-panel').forEach(p => p.classList.remove('open'));
-            wrapper.parentElement.querySelectorAll('.info-btn').forEach(b => b.classList.remove('active', 'text-white'));
+        for (let i = 1; i <= 4; i++) {
+            let val = document.getElementById('p' + i).value;
+            let info = getGradeInfo(val);
             
-            if (!isOpen) {
-              infoPanel.classList.add('open');
-              infoBtn.classList.add('active', 'text-white');
-              infoBtn.style.color = item.color;
-            } else {
-              infoBtn.style.color = '';
+            document.getElementById('h' + i).innerText = info.huruf;
+            document.getElementById('k' + i).innerText = info.ket;
+
+            if (val !== "" && !isNaN(val)) {
+                totalPenguji += parseFloat(val);
+                countPenguji++;
             }
-          });
-
-          pointsDiv.appendChild(wrapper);
-        });
-        
-        card.appendChild(pointsDiv);
-        grid.appendChild(card);
-      });
-
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-      updateProgressUI();
-    }
-
-    function toggleCheck(key, rowElement, checkboxElement, color) {
-      if (checked.has(key)) {
-        checked.delete(key);
-        rowElement.classList.remove('is-checked');
-        checkboxElement.style.borderColor = 'rgba(255,255,255,0.2)';
-        checkboxElement.style.backgroundColor = 'transparent';
-      } else {
-        checked.add(key);
-        rowElement.classList.add('is-checked');
-        checkboxElement.style.borderColor = color;
-        checkboxElement.style.backgroundColor = `${color}20`;
-      }
-      updateProgressUI();
-    }
-
-    function updateProgressUI() {
-      const pct = Math.round((checked.size / totalPoints) * 100) || 0;
-      
-      document.getElementById('progressText').innerHTML = `<strong class="text-white">${checked.size}</strong> dari ${totalPoints} kriteria terpenuhi`;
-      document.getElementById('progressPercent').textContent = pct + '%';
-      
-      const circle = document.getElementById('progressCircle');
-      if(circle) {
-         circle.style.strokeDashoffset = 150.8 - (150.8 * pct / 100);
-      }
-
-      const resetBtn = document.getElementById('resetBtn');
-      if(resetBtn) {
-        if (checked.size > 0) {
-          resetBtn.classList.remove('hidden');
-        } else {
-          resetBtn.classList.add('hidden');
         }
-      }
+
+        let rataRata = 0;
+        if (countPenguji > 0) {
+            rataRata = totalPenguji / countPenguji;
+            document.getElementById('rataAngka').innerText = rataRata.toFixed(2);
+            let rataInfo = getGradeInfo(rataRata);
+            document.getElementById('rataHuruf').innerText = rataInfo.huruf;
+            document.getElementById('rataKet').innerText = rataInfo.ket;
+        } else {
+            document.getElementById('rataAngka').innerText = "";
+            document.getElementById('rataHuruf').innerText = "";
+            document.getElementById('rataKet').innerText = "";
+        }
+
+        let bobotTim = 0;
+        if (countPenguji > 0) {
+            document.getElementById('nilaiTim').innerText = rataRata.toFixed(2);
+            bobotTim = rataRata * 0.75;
+            document.getElementById('bobotTim').innerText = bobotTim.toFixed(2);
+        } else {
+            document.getElementById('nilaiTim').innerText = "";
+            document.getElementById('bobotTim').innerText = "";
+        }
+
+        let valSeminar = document.getElementById('seminar').value;
+        let bobotSeminar = 0;
+        if (valSeminar !== "" && !isNaN(valSeminar)) {
+            let numSeminar = parseFloat(valSeminar);
+            bobotSeminar = numSeminar * 0.25;
+            document.getElementById('bobotSeminar').innerText = bobotSeminar.toFixed(2);
+        } else {
+            document.getElementById('bobotSeminar').innerText = "";
+        }
+
+        if (countPenguji > 0 || (valSeminar !== "" && !isNaN(valSeminar))) {
+            let nilaiAkhir = bobotTim + bobotSeminar;
+            document.getElementById('nilaiAkhir').innerText = nilaiAkhir.toFixed(2);
+            let akhirInfo = getGradeInfo(nilaiAkhir);
+            document.getElementById('hurufAkhir').innerText = akhirInfo.huruf;
+        } else {
+            document.getElementById('nilaiAkhir').innerText = "";
+            document.getElementById('hurufAkhir').innerText = "";
+        }
     }
 
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      checked.clear();
-      initCards(); // Re-render untuk membersihkan tampilan
+    document.querySelectorAll('.input-nilai').forEach(input => {
+        input.addEventListener('input', calculate);
     });
+</script>
 
-    initCards();
-
-    // Element SDK Integration (Pengaman)
-    try {
-      const defaultConfig = {
-        main_title: 'Mastering Scopus\nIntroductions',
-        subtitle: 'Klik teks untuk mencentang progres, dan klik ikon (?) untuk melihat contoh kalimat & penjelasan.',
-        background_color: '#0f1117',
-        surface_color: '#1e1f2a',
-        text_color: '#e8e6e1',
-        accent_color: '#d4a843',
-        muted_color: '#9a978f',
-        font_family: 'Playfair Display',
-        font_size: 16
-      };
-
-      function applyConfig(config) {
-        const t = document.getElementById('mainTitle');
-        const s = document.getElementById('subtitle');
-        if (t) { t.innerHTML = (config.main_title || defaultConfig.main_title).replace(/\n/g, '<br>'); }
-        if (s) { s.innerHTML = config.subtitle || defaultConfig.subtitle; }
-      }
-
-      if (window.elementSdk && typeof window.elementSdk.init === 'function') {
-        window.elementSdk.init({
-          defaultConfig,
-          onConfigChange: async (config) => applyConfig(config),
-          mapToCapabilities: () => ({ recolorables: [], borderables: [], fontEditable: null, fontSizeable: null }),
-          mapToEditPanelValues: (config) => new Map([ ["main_title", config.main_title], ["subtitle", config.subtitle] ])
-        });
-      }
-    } catch (e) {}
-  </script>
 </body>
 </html>
